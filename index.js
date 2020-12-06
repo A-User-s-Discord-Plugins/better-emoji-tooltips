@@ -1,24 +1,24 @@
-const { Plugin } = require('powercord/entities')
-const { getModule, getModuleByDisplayName, React } = require('powercord/webpack')
-const { inject, uninject } = require('powercord/injector')
+const { Plugin } = require('@vizality/entities')
+const { getModule, getModuleByDisplayName, React } = require('@vizality/webpack')
+const { patch, unpatch } = require('@vizality/patcher')
 
 const Settings = require('./Settings')
 
 module.exports = class BetterEmojiTooltips extends Plugin {
-    async startPlugin() {
-        this.loadStylesheet('style.css')
-        powercord.api.settings.registerSettings(this.entityID, {
-            category: this.entityID,
-            label: 'Better Emoji Tooltips',
+    async onStart() {
+        this.injectStyles('style.css')
+        vizality.api.settings.registerAddonSettings({
+            id: this.entityID,
+            heading: 'Better Emoji Tooltips',
             render: Settings
         })
 
         const _this = this
-        const { getCustomEmojiById } = await getModule(['getCustomEmojiById'])
-        const { getGuild } = await getModule(['getGuild'])
+        const { getCustomEmojiById } = await getModule('getCustomEmojiById')
+        const { getGuild } = await getModule('getGuild')
         const Tooltip = await getModuleByDisplayName('Tooltip')
 
-        inject('better-emoji-tooltips', Tooltip.prototype, 'renderTooltip', function (_, res) {
+        patch('better-emoji-tooltips', Tooltip.prototype, 'renderTooltip', function (_, res) {
             if (!res.props.targetElementRef ||
                 !res.props.targetElementRef.current ||
                 (!res.props.children.split && (!this.props['aria-label'] || !this.props['aria-label'].split))
@@ -56,8 +56,8 @@ module.exports = class BetterEmojiTooltips extends Plugin {
         })
     }
 
-    pluginWillUnload() {
-        powercord.api.settings.unregisterSettings(this.entityID)
-        uninject('better-emoji-tooltips')
+    onStop() {
+        vizality.api.settings.unregisterSettings(this.entityID)
+        unpatch('better-emoji-tooltips')
     }
 }

@@ -1,5 +1,5 @@
-const { React } = require('powercord/webpack')
-const { SliderInput, SwitchItem } = require('powercord/components/settings')
+const { React } = require('@vizality/react')
+const { SliderInput, SwitchItem } = require('@vizality/components/settings')
 
 module.exports = class Settings extends React.Component {
     render() {

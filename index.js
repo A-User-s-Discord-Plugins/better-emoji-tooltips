@@ -8,7 +8,7 @@ module.exports = class BetterEmojiTooltips extends Plugin {
     async onStart() {
         this.injectStyles('style.css')
         vizality.api.settings.registerAddonSettings({
-            id: this.entityID,
+            id: this.addonId,
             heading: 'Better Emoji Tooltips',
             render: Settings
         })
@@ -57,7 +57,7 @@ module.exports = class BetterEmojiTooltips extends Plugin {
     }
 
     onStop() {
-        vizality.api.settings.unregisterSettings(this.entityID)
+        vizality.api.settings.unregisterSettings(this.addonId)
         unpatch('better-emoji-tooltips')
     }
 }

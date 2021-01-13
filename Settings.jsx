@@ -1,4 +1,4 @@
-const { React } = require('@vizality/react')
+const { React } = require('@vizality/webpack')
 const { SliderInput, SwitchItem } = require('@vizality/components/settings')
 
 module.exports = class Settings extends React.Component {

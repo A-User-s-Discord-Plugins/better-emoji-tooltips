@@ -5,13 +5,8 @@ const { patch, unpatch } = require('@vizality/patcher')
 const Settings = require('./Settings')
 
 module.exports = class BetterEmojiTooltips extends Plugin {
-    async onStart() {
+    async start() {
         this.injectStyles('style.css')
-        vizality.api.settings.registerAddonSettings({
-            id: this.addonId,
-            heading: 'Better Emoji Tooltips',
-            render: Settings
-        })
 
         const _this = this
         const { getCustomEmojiById } = await getModule('getCustomEmojiById')
@@ -56,7 +51,7 @@ module.exports = class BetterEmojiTooltips extends Plugin {
         })
     }
 
-    onStop() {
+    stop() {
         vizality.api.settings.unregisterSettings(this.addonId)
         unpatch('better-emoji-tooltips')
     }
